@@ -29,20 +29,21 @@ var get_city = function(city) {
     'https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D"' + city + '")&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys', {},
       function(data, state) {
         console.log('data', data);
-        $('.temperature').text(toCelsius(data.query.results.channel.item.condition.temp));
-        $('.date').text(data.query.results.channel.item.forecast[0].date);
-        $('.state').text(': ' + data.query.results.channel.item.condition.text);
-        $(".date_now > th:nth-child(1)").text(data.query.results.channel.item.forecast[1].date);
-        $(".date_now > th:nth-child(2)").text(data.query.results.channel.item.forecast[2].date);
-        $(".date_now > th:nth-child(3)").text(data.query.results.channel.item.forecast[3].date);
-        $(".temp_now > td:nth-child(1)").text(toCelsius(data.query.results.channel.item.forecast[1].low) + " - " + toCelsius(data.query.results.channel.item.forecast[1].high) + " ℃");
-        $(".temp_now > td:nth-child(2)").text(toCelsius(data.query.results.channel.item.forecast[2].low) + " - " + toCelsius(data.query.results.channel.item.forecast[2].high) + " ℃");
-        $(".temp_now > td:nth-child(3)").text(toCelsius(data.query.results.channel.item.forecast[3].low) + " - " + toCelsius(data.query.results.channel.item.forecast[3].high) + " ℃");
+        var result = data.query.results.channel.item;
+        $('.temperature').text(toCelsius(result.condition.temp));
+        $('.date').text(result.forecast[0].date);
+        $('.state').text(': ' + result.condition.text);
+        $(".date_now > th:nth-child(1)").text(result.forecast[1].date);
+        $(".date_now > th:nth-child(2)").text(result.forecast[2].date);
+        $(".date_now > th:nth-child(3)").text(result.forecast[3].date);
+        $(".temp_now > td:nth-child(1)").text(toCelsius(result.forecast[1].low) + " - " + toCelsius(result.forecast[1].high) + " ℃");
+        $(".temp_now > td:nth-child(2)").text(toCelsius(result.forecast[2].low) + " - " + toCelsius(result.forecast[2].high) + " ℃");
+        $(".temp_now > td:nth-child(3)").text(toCelsius(result.forecast[3].low) + " - " + toCelsius(result.forecast[3].high) + " ℃");
 
-        set_icon_state("today", data.query.results.channel.item.condition.text);
-        set_icon_state("day1", data.query.results.channel.item.forecast[1].text);
-        set_icon_state("day2", data.query.results.channel.item.forecast[2].text);
-        set_icon_state("day3", data.query.results.channel.item.forecast[3].text);
+        set_icon_state("today", result.condition.text);
+        set_icon_state("day1", result.forecast[1].text);
+        set_icon_state("day2", result.forecast[2].text);
+        set_icon_state("day3", result.forecast[3].text);
       }
   );
 };
